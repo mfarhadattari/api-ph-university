@@ -1,5 +1,7 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
+import globalErrorHandler from './middlewares/globalErrorHandler';
+import notFound from './middlewares/notFound';
 import { UserRoutes } from './modules/user/user.route';
 
 // ------------->> Initialization Application <<-----------
@@ -30,5 +32,11 @@ app.get('/', (req: Request, res: Response) => {
     },
   });
 });
+
+// --------------->> Global Error Handler <<--------------------
+app.use(globalErrorHandler);
+
+// ----------------->> Not Found Handler <<--------------------
+app.use(notFound);
 
 export default app;

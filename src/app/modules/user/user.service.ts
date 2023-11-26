@@ -1,3 +1,4 @@
+import uniqid from 'uniqid';
 import { config } from '../../config';
 import { IStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
@@ -16,7 +17,7 @@ const createStudentIntoDB = async (password: string, studentData: IStudent) => {
   userData.role = 'student';
 
   //   setting user id : TODO: It will generate automatically
-  userData.id = '203010001';
+  userData.id = uniqid();
 
   //   creating a user
   const newUser = await User.create(userData);

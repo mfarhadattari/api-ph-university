@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 
 // --------------->> Name Interface  <<------------ //
 export interface IName {
@@ -28,10 +28,10 @@ export interface IGuardian {
 // --------------->> Student Interface  <<------------ //
 export interface IStudent {
   id: string;
-  userId: Schema.Types.ObjectId;
+  userId: Types.ObjectId;
   name: IName;
   gender: 'male' | 'female' | 'other';
-  dateOfBirth: Schema.Types.Date;
+  dateOfBirth: Date;
   email: string;
   contractNo: string;
   emergencyContactNo: string;
@@ -40,6 +40,6 @@ export interface IStudent {
   parents: IParents;
   guardian: IGuardian;
   profileImage: string;
-  academicDepartment: Schema.Types.ObjectId;
+  academicDepartment: Types.ObjectId;
   isDeleted: boolean;
 }

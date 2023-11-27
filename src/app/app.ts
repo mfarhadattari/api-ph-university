@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express, { Application, Request, Response } from 'express';
+import express, { Application, RequestHandler } from 'express';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import notFound from './middlewares/notFound';
 import router from './routes';
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use('/api/v1', router);
 
 // -------------->> Application Rote Controller <<----------------
-const roteController = (req: Request, res: Response) => {
+const roteController: RequestHandler = (req, res) => {
   const data = {
     name: 'api-ph-university',
     description: 'Backend service of PH University',

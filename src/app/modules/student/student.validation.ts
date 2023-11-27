@@ -1,4 +1,3 @@
-import { Schema } from 'mongoose';
 import { z } from 'zod';
 
 // --------------->> Name Validation Schema  <<------------ //
@@ -72,43 +71,47 @@ export const guardianValidationSchema = z.object({
 });
 
 // --------------->> Student Validation Schema  <<------------ //
-export const studentValidationSchema = z.object({
-  name: nameValidationSchema,
-  gender: z.enum(['male', 'female', 'other'], {
-    invalid_type_error: 'Gender is not a valid',
-    required_error: 'Gender is required',
+export const createStudentValidationSchema = z.object({
+  body: z.object({
+    student: z.object({
+      name: nameValidationSchema,
+      gender: z.enum(['male', 'female', 'other'], {
+        invalid_type_error: 'Gender is not a valid',
+        required_error: 'Gender is required',
+      }),
+      dateOfBirth: z.string({
+        invalid_type_error: 'Student Date of Birth is invalid',
+        required_error: 'Student Date of Birth is required',
+      }),
+      email: z
+        .string({
+          invalid_type_error: 'Student Email must be a string',
+          required_error: 'Student Email is required',
+        })
+        .email('Invalid student email'),
+      contractNo: z.string({
+        invalid_type_error: 'Student Contract Number must be a string',
+        required_error: 'Student Contract Number is required',
+      }),
+      emergencyContactNo: z.string({
+        invalid_type_error: 'Student Emergency Contact Number must be a string',
+        required_error: 'Student Emergency Contact Number is required',
+      }),
+      presentAddress: z.string({
+        invalid_type_error: 'Student Present Address must be a string',
+        required_error: 'Student Present Address is required',
+      }),
+      permanentAddress: z.string({
+        invalid_type_error: 'Student Permanent Address must be a string',
+        required_error: 'Student Permanent Address is required',
+      }),
+      parents: parentsValidationSchema,
+      guardian: guardianValidationSchema,
+      profileImage: z.string({
+        invalid_type_error: 'Student Profile Image must be a string',
+        required_error: 'Student Profile Image is required',
+      }),
+      academicDepartment: z.string(),
+    }),
   }),
-  dateOfBirth: z.date({
-    invalid_type_error: 'Student Date of Birth is invalid',
-    required_error: 'Student Date of Birth is required',
-  }),
-  email: z
-    .string({
-      invalid_type_error: 'Student Email must be a string',
-      required_error: 'Student Email is required',
-    })
-    .email('Invalid student email'),
-  contractNo: z.string({
-    invalid_type_error: 'Student Contract Number must be a string',
-    required_error: 'Student Contract Number is required',
-  }),
-  emergencyContactNo: z.string({
-    invalid_type_error: 'Student Emergency Contact Number must be a string',
-    required_error: 'Student Emergency Contact Number is required',
-  }),
-  presentAddress: z.string({
-    invalid_type_error: 'Student Present Address must be a string',
-    required_error: 'Student Present Address is required',
-  }),
-  permanentAddress: z.string({
-    invalid_type_error: 'Student Permanent Address must be a string',
-    required_error: 'Student Permanent Address is required',
-  }),
-  parents: parentsValidationSchema,
-  guardian: guardianValidationSchema,
-  profileImage: z.string({
-    invalid_type_error: 'Student Profile Image must be a string',
-    required_error: 'Student Profile Image is required',
-  }),
-  academicDepartment: z.instanceof(Schema.Types.ObjectId),
 });

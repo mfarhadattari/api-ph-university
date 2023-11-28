@@ -79,7 +79,7 @@ export const createStudentValidationSchema = z.object({
         invalid_type_error: 'Gender is not a valid',
         required_error: 'Gender is required',
       }),
-      dateOfBirth: z.string({
+      dateOfBirth: z.coerce.date({
         invalid_type_error: 'Student Date of Birth is invalid',
         required_error: 'Student Date of Birth is required',
       }),

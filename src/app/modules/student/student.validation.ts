@@ -111,7 +111,10 @@ export const createStudentValidationSchema = z.object({
         invalid_type_error: 'Student Profile Image must be a string',
         required_error: 'Student Profile Image is required',
       }),
-      academicDepartment: z.string(),
+      admissionSemester: z.string({
+        invalid_type_error: 'Student Admission Semester must be a string',
+        required_error: 'Student Admission Semester is required',
+      }),
     }),
   }),
 });

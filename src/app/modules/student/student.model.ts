@@ -135,6 +135,15 @@ const studentSchema = new Schema<IStudent>(
       type: String,
       required: true,
     },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'AcademicSemester',
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

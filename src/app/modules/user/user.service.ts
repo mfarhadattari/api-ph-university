@@ -1,12 +1,13 @@
-import uniqid from 'uniqid';
 import { config } from '../../config';
+import { AcademicSemesters } from '../academicSemester/academicSemester.model';
 import { IStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { IUser } from './user.interface';
 import { User } from './user.model';
+import { generateStudentId } from './user.utils';
 
 // -------------------->> Create A Student Service <<-------------------
-const createStudentIntoDB = async (password: string, studentData: IStudent) => {
+const createStudentIntoDB = async (password: string, payload: IStudent) => {
   // create a user object
   const userData: Partial<IUser> = {};
 
@@ -16,18 +17,27 @@ const createStudentIntoDB = async (password: string, studentData: IStudent) => {
   //   set user role
   userData.role = 'student';
 
+  // get academic semester
+  const admissionSemester = await AcademicSemesters.findById(
+    payload.admissionSemester,
+  );
+
+  if (!admissionSemester) {
+    throw new Error('Admission semester not found');
+  }
+
   //   setting user id : TODO: It will generate automatically
-  userData.id = uniqid();
+  userData.id = await generateStudentId(admissionSemester);
 
   //   creating a user
   const newUser = await User.create(userData);
 
   //   creating student
   if (newUser._id) {
-    studentData.id = newUser.id;
-    studentData.userId = newUser._id;
+    payload.id = newUser.id;
+    payload.userId = newUser._id;
 
-    const newStudent = await Student.create(studentData);
+    const newStudent = await Student.create(payload);
     return newStudent;
   }
 };

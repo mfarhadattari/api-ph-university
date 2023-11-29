@@ -1,9 +1,9 @@
 import { config } from '../../config';
 import { AcademicSemesters } from '../academicSemester/academicSemester.model';
 import { IStudent } from '../student/student.interface';
-import { Student } from '../student/student.model';
+import { Students } from '../student/student.model';
 import { IUser } from './user.interface';
-import { User } from './user.model';
+import { Users } from './user.model';
 import { generateStudentId } from './user.utils';
 
 // -------------------->> Create A Student Service <<-------------------
@@ -30,14 +30,14 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
   userData.id = await generateStudentId(admissionSemester);
 
   //   creating a user
-  const newUser = await User.create(userData);
+  const newUser = await Users.create(userData);
 
   //   creating student
   if (newUser._id) {
     payload.id = newUser.id;
     payload.userId = newUser._id;
 
-    const newStudent = await Student.create(payload);
+    const newStudent = await Students.create(payload);
     return newStudent;
   }
 };

@@ -12,12 +12,24 @@ const getLastStudentId = async () => {
     })
     .lean();
 
-  return lastStudentId?.id ? lastStudentId.id.substring(6) : '0';
+  return lastStudentId?.id || undefined;
 };
 
 // ------------------>> Generate Student ID <<-----------------
 export const generateStudentId = async (payload: IAcademicSemester) => {
-  const currentId = await getLastStudentId();
-  const incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
-  return `${payload.year}${payload.code}${incrementId}`;
+  let currentSN = '0001';
+  const lastStudentId = await getLastStudentId();
+  const lastStudentYear = lastStudentId?.substring(0, 4);
+  const lastStudentCode = lastStudentId?.substring(4, 6);
+  if (
+    lastStudentId &&
+    lastStudentYear === payload.year &&
+    lastStudentCode === payload.code
+  ) {
+    currentSN = (Number(lastStudentId.substring(6)) + 1)
+      .toString()
+      .padStart(4, '0');
+  }
+
+  return `${payload.year}${payload.code}${currentSN}`;
 };

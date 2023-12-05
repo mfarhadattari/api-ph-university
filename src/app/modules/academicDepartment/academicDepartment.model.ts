@@ -13,6 +13,25 @@ const academicDepartmentSchema = new Schema<IAcademicDepartment>({
   },
 });
 
+// --------------------->> Create Academic Department Middleware <<--------------------
+academicDepartmentSchema.pre('save', async function (next) {
+  const isExist = await AcademicDepartments.findOne({ name: this.name });
+  if (isExist) {
+    throw new Error(`Academic Departments already exists`);
+  }
+  next();
+});
+
+// --------------------->> Update Academic Department Middleware <<--------------------
+academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
+  const query = this.getQuery();
+  const isExist = await AcademicDepartments.findOne(query);
+  if (!isExist) {
+    throw new Error(`Academic Departments is not exist`);
+  }
+  next();
+});
+
 export const AcademicDepartments = model<IAcademicDepartment>(
   'AcademicDepartment',
   academicDepartmentSchema,

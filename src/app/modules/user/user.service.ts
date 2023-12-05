@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import { config } from '../../config';
+import AppError from '../../utils/appError';
 import { AcademicSemesters } from '../academicSemester/academicSemester.model';
 import { IStudent } from '../student/student.interface';
 import { Students } from '../student/student.model';
@@ -23,7 +25,7 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
   );
 
   if (!admissionSemester) {
-    throw new Error('Admission semester not found');
+    throw new AppError(httpStatus.NOT_FOUND, 'Admission semester not found');
   }
 
   //   setting user id : TODO: It will generate automatically

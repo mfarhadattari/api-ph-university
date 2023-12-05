@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 import { config } from '../../config';
 import AppError from '../../utils/appError';
 import { AcademicSemesters } from '../academicSemester/academicSemester.model';
@@ -28,19 +30,39 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Admission semester not found');
   }
 
-  //   setting user id : TODO: It will generate automatically
-  userData.id = await generateStudentId(admissionSemester);
+  const session = await mongoose.startSession();
 
-  //   creating a user
-  const newUser = await Users.create(userData);
+  try {
+    session.startTransaction();
+    //   setting user id
+    userData.id = await generateStudentId(admissionSemester);
 
-  //   creating student
-  if (newUser._id) {
-    payload.id = newUser.id;
-    payload.userId = newUser._id;
+    //   creating a user --> transaction 1
+    const newUser = await Users.create([userData], { session });
 
-    const newStudent = await Students.create(payload);
+    //   creating student
+    if (!newUser.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
+    }
+
+    payload.id = newUser[0].id;
+    payload.userId = newUser[0]._id;
+
+    //   creating a student --> transaction 2
+    const newStudent = await Students.create([payload], { session });
+
+    if (!newStudent.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
     return newStudent;
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, error.message);
   }
 };
 

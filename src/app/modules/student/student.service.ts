@@ -60,8 +60,43 @@ const deleteStudentFormDB = async (id: string) => {
   }
 };
 
+// ----------------------->> Update Student Service <<--------------------
+const updateStudentIntoDB = async (
+  id: string,
+  payload: Partial<IStudent>,
+): Promise<IStudent | null> => {
+  const { name, parents, guardian, ...remainingStudentInfo } = payload;
+  const modifiedStudent: Record<string, unknown> = { ...remainingStudentInfo };
+
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedStudent[`name.${key}`] = value;
+    }
+  }
+
+  if (parents && Object.keys(parents).length) {
+    for (const [key, value] of Object.entries(parents)) {
+      modifiedStudent[`parents.${key}`] = value;
+    }
+  }
+
+  if (guardian && Object.keys(guardian).length) {
+    for (const [key, value] of Object.entries(guardian)) {
+      modifiedStudent[`guardian.${key}`] = value;
+    }
+  }
+
+  const result = await Students.findOneAndUpdate({ id }, modifiedStudent, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
 export const StudentServices = {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
   deleteStudentFormDB,
+  updateStudentIntoDB,
 };

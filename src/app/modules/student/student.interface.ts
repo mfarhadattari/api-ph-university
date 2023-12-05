@@ -40,6 +40,7 @@ export interface IStudent {
   parents: IParents;
   guardian: IGuardian;
   profileImage: string;
+  academicDepartment: Types.ObjectId;
   admissionSemester: Types.ObjectId;
   isDeleted: boolean;
 }

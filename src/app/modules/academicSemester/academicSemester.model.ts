@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import { Schema, model } from 'mongoose';
-import AppError from '../../utils/appError';
+import AppError from '../../error/appError';
 import {
   months,
   semesterCode,

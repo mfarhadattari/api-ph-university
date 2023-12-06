@@ -1,10 +1,7 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { AcademicDepartmentControllers } from './academicDepartment.controller';
-import {
-  createAcademicDepartmentValidationSchema,
-  updateAcademicDepartmentValidationSchema,
-} from './academicDepartment.validation';
+import { updateAcademicDepartmentValidationSchema } from './academicDepartment.validation';
 
 // -------->> Initialized Router <<------------ //
 const router = express.Router();
@@ -12,7 +9,7 @@ const router = express.Router();
 // -------->> Create Academic Department Router <<------------ //
 router.post(
   '/',
-  validateRequest(createAcademicDepartmentValidationSchema),
+  // validateRequest(createAcademicDepartmentValidationSchema),
   AcademicDepartmentControllers.createAcademicDepartment,
 );
 

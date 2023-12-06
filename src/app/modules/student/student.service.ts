@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
-import AppError from '../../utils/appError';
+import AppError from '../../error/appError';
 import { Users } from '../user/user.model';
 import { IStudent } from './student.interface';
 import { Students } from './student.model';

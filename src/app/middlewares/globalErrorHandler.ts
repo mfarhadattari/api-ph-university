@@ -3,7 +3,7 @@
 import { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
 import { config } from '../config';
-import AppError from '../error/appError';
+import AppError from '../error/AppError';
 import castErrorHandler from '../error/castErrorHandler';
 import duplicateErrorHandler from '../error/duplicateErrorHandler';
 import validationErrorHandler from '../error/validationErrorHandler';

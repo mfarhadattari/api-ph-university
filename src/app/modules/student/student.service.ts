@@ -1,23 +1,56 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
-import AppError from '../../error/appError';
+import AppError from '../../error/AppError';
 import { Users } from '../user/user.model';
+import { searchableField } from './student.const';
 import { IStudent } from './student.interface';
 import { Students } from './student.model';
 
 // ----------------------->> Get All Student Service <<--------------------
-const getAllStudentsFromDB = async (): Promise<IStudent[]> => {
-  const result = await Students.find().populate('admissionSemester').populate({
+const getAllStudentsFromDB = async (
+  query: Record<string, unknown>,
+): Promise<IStudent[]> => {
+  const result = Students.find().populate('admissionSemester').populate({
     path: 'academicDepartment',
     populate: 'academicFaculty',
   });
-  return result;
+
+  // -------------->> searching <<------------------
+  const searchTerm = query.searchTerm || '';
+
+  const searchingResult = result.find({
+    $or: searchableField.map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    })),
+  });
+
+  // -------------->> filtering <<------------------
+  const queryObject = { ...query };
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+  excludeFields.forEach((field) => delete queryObject[field]);
+  const filteredResults = searchingResult.find(queryObject);
+
+  // ---------------->> Sorting <<----------------
+  const sort = (query.sort as string)?.split(',')?.join(' ') || '-createdAt';
+  const sortedResults = filteredResults.sort(sort);
+
+  // ---------------->> Paginating <<----------------
+  const limit = Number(query?.limit) || 10;
+  const page = Number(query?.page) || 1;
+  const skip = (page - 1) * limit;
+  const paginatedResult = sortedResults.limit(limit).skip(skip);
+
+  // ---------------->> Filed Filtering <<----------------
+  const fields = (query?.fields as string)?.split(',')?.join(' ') || '-_v';
+  const fieldFilteredResults = await paginatedResult.select(fields);
+
+  return fieldFilteredResults;
 };
 
-// ----------------------->> Get All Student Service <<--------------------
+// ----------------------->> Get Single Student Service <<--------------------
 const getSingleStudentFromDB = async (id: string): Promise<IStudent | null> => {
-  const result = await Students.findById(id).populate({
+  const result = await Students.findOne({ id }).populate({
     path: 'academicDepartment',
     populate: 'academicFaculty',
   });

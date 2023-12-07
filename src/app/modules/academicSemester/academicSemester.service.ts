@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import AppError from '../../error/appError';
+import AppError from '../../error/AppError';
 import { semesterNameAndCodeMapper } from './academicSemester.constant';
 import { IAcademicSemester } from './academicSemester.interface';
 import { AcademicSemesters } from './academicSemester.model';

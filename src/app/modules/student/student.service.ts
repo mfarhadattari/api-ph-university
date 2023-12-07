@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
 import { Users } from '../user/user.model';
 import { searchableField } from './student.const';
@@ -11,41 +12,23 @@ import { Students } from './student.model';
 const getAllStudentsFromDB = async (
   query: Record<string, unknown>,
 ): Promise<IStudent[]> => {
-  const result = Students.find().populate('admissionSemester').populate({
-    path: 'academicDepartment',
-    populate: 'academicFaculty',
-  });
+  const modelQuery = Students.find()
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
+  const studentQuery = new QueryBuilder(modelQuery, query)
+    .search(searchableField)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  // -------------->> searching <<------------------
-  const searchTerm = query.searchTerm || '';
-
-  const searchingResult = result.find({
-    $or: searchableField.map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' },
-    })),
-  });
-
-  // -------------->> filtering <<------------------
-  const queryObject = { ...query };
-  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-  excludeFields.forEach((field) => delete queryObject[field]);
-  const filteredResults = searchingResult.find(queryObject);
-
-  // ---------------->> Sorting <<----------------
-  const sort = (query.sort as string)?.split(',')?.join(' ') || '-createdAt';
-  const sortedResults = filteredResults.sort(sort);
-
-  // ---------------->> Paginating <<----------------
-  const limit = Number(query?.limit) || 10;
-  const page = Number(query?.page) || 1;
-  const skip = (page - 1) * limit;
-  const paginatedResult = sortedResults.limit(limit).skip(skip);
-
-  // ---------------->> Filed Filtering <<----------------
-  const fields = (query?.fields as string)?.split(',')?.join(' ') || '-_v';
-  const fieldFilteredResults = await paginatedResult.select(fields);
-
-  return fieldFilteredResults;
+  const result = await studentQuery.modelQuery;
+  return result;
 };
 
 // ----------------------->> Get Single Student Service <<--------------------

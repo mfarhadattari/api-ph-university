@@ -59,3 +59,26 @@ export const generateFacultyId = async () => {
   }
   return `F-${currentSN}`;
 };
+
+// ------------------->> Get Last Admin Id <----------------
+const getLastAdminId = async () => {
+  const lastAdminId = await Users.findOne({ role: 'admin' }, { id: 1, _id: 0 })
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  return lastAdminId?.id || undefined;
+};
+
+// ------------------>> Generate Student ID <<-----------------
+export const generateAdminId = async () => {
+  let currentSN = '0001';
+  const lastAdminId = await getLastAdminId();
+  if (lastAdminId) {
+    currentSN = (Number(lastAdminId.substring(2)) + 1)
+      .toString()
+      .padStart(4, '0');
+  }
+  return `A-${currentSN}`;
+};

@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { IName } from '../student/student.interface';
 
-export interface IFaculty {
+export interface IAdmin {
   id: string;
   userId: Types.ObjectId;
   designation: string;
@@ -14,6 +14,6 @@ export interface IFaculty {
   presentAddress: string;
   permanentAddress: string;
   profileImage: string;
-  academicDepartment: Types.ObjectId;
+  managementDepartment: Types.ObjectId;
   isDeleted: boolean;
 }

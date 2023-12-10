@@ -12,14 +12,12 @@ import { Faculty } from './faculty.model';
 const getAllFacultiesFromDB = async (
   query: Record<string, unknown>,
 ): Promise<IFaculty[]> => {
-  const modelQuery = Faculty.find()
-    .populate('academicFaculty')
-    .populate({
-      path: 'academicDepartment',
-      populate: {
-        path: 'academicFaculty',
-      },
-    });
+  const modelQuery = Faculty.find().populate({
+    path: 'academicDepartment',
+    populate: {
+      path: 'academicFaculty',
+    },
+  });
   const FacultyQuery = new QueryBuilder(modelQuery, query)
     .search(facultySearchableField)
     .filter()
@@ -35,7 +33,9 @@ const getAllFacultiesFromDB = async (
 const getSingleFacultyFromDB = async (id: string): Promise<IFaculty | null> => {
   const result = await Faculty.findById(id).populate({
     path: 'academicDepartment',
-    populate: 'academicFaculty',
+    populate: {
+      path: 'academicFaculty',
+    },
   });
   return result;
 };
@@ -93,6 +93,11 @@ const updateFacultyIntoDB = async (
   const result = await Faculty.findByIdAndUpdate(id, modifiedFaculty, {
     new: true,
     runValidators: true,
+  }).populate({
+    path: 'academicDepartment',
+    populate: {
+      path: 'academicFaculty',
+    },
   });
 
   return result;

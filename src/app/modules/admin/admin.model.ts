@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
 import { nameSchema } from '../student/student.model';
-import { IFaculty } from './faculty.interface';
+import { IAdmin } from './admin.interface';
 
 // --------------->> Student Schema  <<------------ //
-const facultySchema = new Schema<IFaculty>(
+const adminSchema = new Schema<IAdmin>(
   {
     id: {
       type: String,
@@ -58,7 +58,7 @@ const facultySchema = new Schema<IFaculty>(
       type: String,
       required: true,
     },
-    academicDepartment: {
+    managementDepartment: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'AcademicDepartment',
@@ -74,4 +74,4 @@ const facultySchema = new Schema<IFaculty>(
 );
 
 // --------------->> Faculty Model  <<------------ //
-export const Faculty = model<IFaculty>('Faculty', facultySchema);
+export const Admin = model<IAdmin>('Admin', adminSchema);

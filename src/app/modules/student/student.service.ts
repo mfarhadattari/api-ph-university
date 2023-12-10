@@ -33,9 +33,11 @@ const getAllStudentsFromDB = async (
 
 // ----------------------->> Get Single Student Service <<--------------------
 const getSingleStudentFromDB = async (id: string): Promise<IStudent | null> => {
-  const result = await Students.findOne({ id }).populate({
+  const result = await Students.findById(id).populate({
     path: 'academicDepartment',
-    populate: 'academicFaculty',
+    populate: {
+      path: 'academicFaculty',
+    },
   });
   return result;
 };
@@ -47,8 +49,8 @@ const deleteStudentFormDB = async (id: string) => {
   try {
     session.startTransaction();
 
-    const deletedStudent = await Students.findOneAndUpdate(
-      { id },
+    const deletedStudent = await Students.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session: session },
     );
@@ -57,8 +59,8 @@ const deleteStudentFormDB = async (id: string) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
     }
 
-    const deletedUser = await Users.findOneAndUpdate(
-      { id },
+    const deletedUser = await Users.findByIdAndUpdate(
+      deletedStudent.userId,
       { isDeleted: true },
       { new: true, session: session },
     );
@@ -102,9 +104,14 @@ const updateStudentIntoDB = async (
     }
   }
 
-  const result = await Students.findOneAndUpdate({ id }, modifiedStudent, {
+  const result = await Students.findByIdAndUpdate(id, modifiedStudent, {
     new: true,
     runValidators: true,
+  }).populate({
+    path: 'academicDepartment',
+    populate: {
+      path: 'academicFaculty',
+    },
   });
 
   return result;

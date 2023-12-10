@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
 import { Users } from '../user/user.model';
-import { searchableField } from './student.const';
+import { studentSearchableField } from './student.const';
 import { IStudent } from './student.interface';
 import { Students } from './student.model';
 
@@ -21,7 +21,7 @@ const getAllStudentsFromDB = async (
       },
     });
   const studentQuery = new QueryBuilder(modelQuery, query)
-    .search(searchableField)
+    .search(studentSearchableField)
     .filter()
     .sort()
     .paginate()

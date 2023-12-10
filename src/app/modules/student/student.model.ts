@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 import { IGuardian, IName, IParents, IStudent } from './student.interface';
 
 // --------------->> Name Schema  <<------------ //
-const nameSchema = new Schema<IName>(
+export const nameSchema = new Schema<IName>(
   {
     firstName: {
       type: String,

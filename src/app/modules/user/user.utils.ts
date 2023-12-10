@@ -33,3 +33,29 @@ export const generateStudentId = async (payload: IAcademicSemester) => {
 
   return `${payload.year}${payload.code}${currentSN}`;
 };
+
+// ------------------->> Get Last Faculty Id <----------------
+const getLastFacultyId = async () => {
+  const lastFacultyId = await Users.findOne(
+    { role: 'faculty' },
+    { id: 1, _id: 0 },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  return lastFacultyId?.id || undefined;
+};
+
+// ------------------>> Generate Student ID <<-----------------
+export const generateFacultyId = async () => {
+  let currentSN = '0001';
+  const lastFacultyId = await getLastFacultyId();
+  if (lastFacultyId) {
+    currentSN = (Number(lastFacultyId.substring(2)) + 1)
+      .toString()
+      .padStart(4, '0');
+  }
+  return `F-${currentSN}`;
+};

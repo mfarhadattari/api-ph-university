@@ -1,5 +1,6 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
+import { createFacultyValidationSchema } from '../faculty/faculty.validation';
 import { createStudentValidationSchema } from '../student/student.validation';
 import { UserControllers } from './user.controller';
 
@@ -11,6 +12,13 @@ router.post(
   '/create-student',
   validateRequest(createStudentValidationSchema),
   UserControllers.createStudent,
+);
+
+// ------------->> Create A Faculty Route <<--------------- //
+router.post(
+  '/create-faculty',
+  validateRequest(createFacultyValidationSchema),
+  UserControllers.createFaculty,
 );
 
 // ---------->> Export User Routes <------------- //

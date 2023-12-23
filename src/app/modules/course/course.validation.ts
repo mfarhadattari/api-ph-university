@@ -35,7 +35,7 @@ export const updateCourseValidationSchema = z.object({
   }),
 });
 
-export const createCourseFacultyValidationSchema = z.object({
+export const courseFacultyValidationSchema = z.object({
   body: z.object({
     faculties: z.array(z.string()),
   }),

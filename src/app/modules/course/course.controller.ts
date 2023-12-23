@@ -67,7 +67,7 @@ const updateCourse = catchAsync(async (req, res) => {
   });
 });
 
-// ----------------------->> Add Create Faculties Controller <<--------------------
+// ----------------------->> Create Course Faculties Controller <<--------------------
 const createCourseFaculties = catchAsync(async (req, res) => {
   const id = req.params.courseId;
   const result = await CourseServices.createCourseFacultyIntoDB(id, req.body);
@@ -79,6 +79,18 @@ const createCourseFaculties = catchAsync(async (req, res) => {
   });
 });
 
+// ----------------------->> Remove Course Faculties Controller <<--------------------
+const removeCourseFaculties = catchAsync(async (req, res) => {
+  const id = req.params.courseId;
+  const result = await CourseServices.removeCourseFacultyIntoDB(id, req.body);
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: 'Course Faculties Remove successfully',
+    data: result,
+  });
+});
+
 export const CourseControllers = {
   createCourse,
   getAllCourses,
@@ -86,4 +98,5 @@ export const CourseControllers = {
   deleteCourse,
   updateCourse,
   createCourseFaculties,
+  removeCourseFaculties,
 };

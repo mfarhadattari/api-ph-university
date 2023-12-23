@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
 import { courseSearchableFields } from './course.const';
-import { ICourse } from './course.interface';
-import { Courses } from './course.model';
+import { ICourse, ICourseFaculty } from './course.interface';
+import { CourseFaculty, Courses } from './course.model';
 
 // ------------------>> Create Course Service <<-------------------
 const createCourseIntoDB = async (payload: ICourse) => {
@@ -133,6 +133,30 @@ const updateCourseIntoDB = async (id: string, payload: Partial<ICourse>) => {
   }
 };
 
+// ------------------>> Create Course Faculties Service <<-------------------
+const createCourseFacultyIntoDB = async (
+  courseId: string,
+  payload: Partial<ICourseFaculty>,
+) => {
+  const result = await CourseFaculty.findByIdAndUpdate(
+    courseId,
+    {
+      course: courseId,
+      $addToSet: {
+        faculties: {
+          $each: payload.faculties,
+        },
+      },
+    },
+    {
+      upsert: true,
+      new: true,
+    },
+  );
+
+  return result;
+};
+
 // ------------------>> Exporting Course Service <<-------------------
 export const CourseServices = {
   createCourseIntoDB,
@@ -140,4 +164,5 @@ export const CourseServices = {
   getSingleCourseFromDB,
   deleteCourseFromDB,
   updateCourseIntoDB,
+  createCourseFacultyIntoDB,
 };

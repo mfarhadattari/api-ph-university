@@ -4,7 +4,7 @@ const createPreRequisiteCourseValidationSchema = z.object({
   isDeleted: z.boolean().optional(),
 });
 
-export const createdCourseValidationSchema = z.object({
+export const createCourseValidationSchema = z.object({
   body: z.object({
     title: z.string(),
     prefix: z.string(),
@@ -32,5 +32,11 @@ export const updateCourseValidationSchema = z.object({
     preRequisiteCourses: z
       .array(updatePreRequisiteCourseValidationSchema)
       .optional(),
+  }),
+});
+
+export const createCourseFacultyValidationSchema = z.object({
+  body: z.object({
+    faculties: z.array(z.string()),
   }),
 });

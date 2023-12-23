@@ -67,10 +67,23 @@ const updateCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ----------------------->> Add Create Faculties Controller <<--------------------
+const createCourseFaculties = catchAsync(async (req, res) => {
+  const id = req.params.courseId;
+  const result = await CourseServices.createCourseFacultyIntoDB(id, req.body);
+  sendResponse(res, {
+    status: httpStatus.CREATED,
+    success: true,
+    message: 'Course faculties assigned successfully',
+    data: result,
+  });
+});
+
 export const CourseControllers = {
   createCourse,
   getAllCourses,
   getSingleCourse,
   deleteCourse,
   updateCourse,
+  createCourseFaculties,
 };

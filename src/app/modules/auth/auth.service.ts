@@ -4,8 +4,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { config } from '../../config';
 import AppError from '../../error/AppError';
 import { User } from '../user/user.model';
-import { IChangePassword, ILoginUser } from './auth.interface';
-import { createJWTToken } from './auth.utils';
+import { IChangePassword, ILoginUser, IResetPassword } from './auth.interface';
+import { createJWTToken, sendResetPasswordMail } from './auth.utils';
 
 // -------------------->> Login User Auth Service <<-------------------
 const loginUserIntoDB = async (payload: ILoginUser) => {
@@ -115,10 +115,10 @@ const refreshToken = async (token: string) => {
     config.jwt_refresh_config as Record<string, unknown>,
   ) as JwtPayload;
 
-  const { userId, iat } = decoded;
+  const { id, iat } = decoded;
 
   // checking if the user is exist
-  const isUserExist = await User.isUserExistByCustomId(userId);
+  const isUserExist = await User.isUserExistByCustomId(id);
 
   if (!isUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
@@ -163,9 +163,96 @@ const refreshToken = async (token: string) => {
   };
 };
 
+// -------------------->> Forget Password Auth Service <<-------------------
+const forgetPassword = async (id: string) => {
+  // checking user exist or not
+  const isUserExist = await User.isUserExistByCustomId(id);
+  if (!isUserExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
+  }
+
+  // checking user delete or not
+  if (isUserExist.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User is deleted');
+  }
+
+  // checking user blocked or unblocked
+  if (isUserExist.status === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'User is blocked');
+  }
+
+  const jwtPayload = {
+    id: isUserExist.id,
+    role: isUserExist.role,
+  };
+
+  const resetToken = createJWTToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    { ...config.jwt_access_config, expiresIn: '5m' },
+  );
+
+  const resetLink = `${
+    config.client_base_url as string
+  }/reset-password?id=${id}&token=${resetToken}`;
+
+  sendResetPasswordMail(isUserExist.email, resetLink);
+
+  return null;
+};
+
+// -------------------->> Reset Password Auth Service <<-------------------
+const resetPassword = async (payload: IResetPassword, token: string) => {
+  // checking user exist or not
+  const isUserExist = await User.isUserExistByCustomId(payload?.id);
+  if (!isUserExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
+  }
+
+  // checking user delete or not
+  if (isUserExist.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User is deleted');
+  }
+
+  // checking user blocked or unblocked
+  if (isUserExist.status === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'User is blocked');
+  }
+
+  // decoding token
+  const decoded = jwt.verify(
+    token,
+    config.jwt_access_secret as string,
+    config.jwt_access_config as Record<string, unknown>,
+  ) as JwtPayload;
+
+  if (decoded.id !== payload.id) {
+    throw new AppError(httpStatus.FORBIDDEN, 'You are unauthorized');
+  }
+
+  // hashing new password
+  const newHashedPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  await User.findOneAndUpdate(
+    { id: decoded.id, role: decoded.role },
+    {
+      password: newHashedPassword,
+      needPasswordChange: false,
+      passwordChangedAt: new Date(),
+    },
+  );
+
+  return null;
+};
+
 // -------------------->> Export Auth Services <<-------------------
 export const AuthServices = {
   loginUserIntoDB,
   changePasswordIntoDB,
   refreshToken,
+  forgetPassword,
+  resetPassword,
 };

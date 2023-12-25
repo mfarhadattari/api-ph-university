@@ -4,8 +4,10 @@ import validateRequest from '../../middlewares/validateRequest';
 import { AuthControllers } from './auth.controller';
 import {
   changePasswordValidationSchema,
+  forgetPasswordValidationSchema,
   loginUserValidationSchema,
   refreshTokenValidationSchema,
+  resetPasswordValidationSchema,
 } from './auth.validation';
 
 // -------->> Initialized Router <<------------ //
@@ -31,6 +33,20 @@ router.post(
   '/refresh-token',
   validateRequest(refreshTokenValidationSchema),
   AuthControllers.refreshToken,
+);
+
+// ------------->> Forget Password Auth Route <<--------------- //
+router.post(
+  '/forget-password',
+  validateRequest(forgetPasswordValidationSchema),
+  AuthControllers.forgetPassword,
+);
+
+// ------------->> Reset Password Auth Route <<--------------- //
+router.post(
+  '/reset-password',
+  validateRequest(resetPasswordValidationSchema),
+  AuthControllers.resetPassword,
 );
 
 // ---------->> Export Auth Routes <------------- //

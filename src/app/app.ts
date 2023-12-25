@@ -6,6 +6,7 @@ import express, {
   RequestHandler,
   Response,
 } from 'express';
+import { config } from './config';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import notFound from './middlewares/notFound';
 import router from './routes';
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(cookie());
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: [config.client_base_url as string],
   }),
 );
 

@@ -33,5 +33,12 @@ router.post(
   UserControllers.createAdmin,
 );
 
+// ------------->> Get me Route <<--------------- //
+router.get(
+  '/get-me',
+  authValidator('admin', 'faculty', 'student'),
+  UserControllers.getMe,
+);
+
 // ---------->> Export User Routes <------------- //
 export const UserRoutes = router;

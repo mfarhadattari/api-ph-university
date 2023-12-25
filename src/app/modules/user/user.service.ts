@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { config } from '../../config';
 import AppError from '../../error/AppError';
@@ -176,9 +177,38 @@ const createAdminIntoDB = async (password: string, payload: IAdmin) => {
   }
 };
 
+// -------------------->> Create A Admin Service <<-------------------
+const getMeFromDB = async (payload: JwtPayload) => {
+  const { id, role } = payload;
+  let result;
+  if (role === 'student') {
+    result = await Student.findOne({ id })
+      .populate('admissionSemester')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      });
+  } else if (role === 'faculty') {
+    result = await Faculty.findOne({ id }).populate({
+      path: 'academicDepartment',
+      populate: 'academicFaculty',
+    });
+  } else if (role === 'admin') {
+    result = await Admin.findOne({ id }).populate({
+      path: 'managementDepartment',
+      populate: 'academicFaculty',
+    });
+  }
+
+  return result;
+};
+
 // -------------------->> Export User Services <<-------------------
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  getMeFromDB,
 };

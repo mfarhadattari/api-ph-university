@@ -33,12 +33,14 @@ const getAllStudentsFromDB = async (
 
 // ----------------------->> Get Single Student Service <<--------------------
 const getSingleStudentFromDB = async (id: string): Promise<IStudent | null> => {
-  const result = await Student.findById(id).populate({
-    path: 'academicDepartment',
-    populate: {
-      path: 'academicFaculty',
-    },
-  });
+  const result = await Student.findById(id)
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
   return result;
 };
 

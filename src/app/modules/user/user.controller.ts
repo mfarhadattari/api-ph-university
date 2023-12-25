@@ -43,9 +43,23 @@ const createAdmin = catchAsync(async (req, res) => {
   });
 });
 
+// -------------------->> Get Me Controller <<-------------------
+const getMe = catchAsync(async (req, res) => {
+  const user = req.user;
+  const result = await UserServices.getMeFromDB(user);
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: 'Profile information retrieved',
+    data: result,
+  });
+});
+
 // -------------------->> Export Student Controllers <<-------------------
 export const UserControllers = {
   createStudent,
   createFaculty,
   createAdmin,
+  getMe,
 };

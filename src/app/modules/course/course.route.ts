@@ -1,4 +1,5 @@
 import express from 'express';
+import authValidator from '../../middlewares/authValidator';
 import validateRequest from '../../middlewares/validateRequest';
 import { CourseControllers } from './course.controller';
 import {
@@ -13,22 +14,24 @@ const router = express.Router();
 // ---------------->> create course route <<----------------------
 router.post(
   '/',
+  authValidator('admin'),
   validateRequest(createCourseValidationSchema),
   CourseControllers.createCourse,
 );
 
 // ---------------->> Get all course route <<----------------------
-router.get('/', CourseControllers.getAllCourses);
+router.get('/', authValidator('admin'), CourseControllers.getAllCourses);
 
 // ---------------->> Get Single course route <<----------------------
-router.get('/:id', CourseControllers.getSingleCourse);
+router.get('/:id', authValidator('admin'), CourseControllers.getSingleCourse);
 
 // ---------------->> Delete course route <<----------------------
-router.delete('/:id', CourseControllers.deleteCourse);
+router.delete('/:id', authValidator('admin'), CourseControllers.deleteCourse);
 
 // ---------------->> Update course route <<----------------------
 router.put(
   '/:id',
+  authValidator('admin'),
   validateRequest(updateCourseValidationSchema),
   CourseControllers.updateCourse,
 );
@@ -36,6 +39,7 @@ router.put(
 // ---------------->> Create course Faculties route <<----------------------
 router.put(
   '/:courseId/assign-faculties',
+  authValidator('admin'),
   validateRequest(courseFacultyValidationSchema),
   CourseControllers.createCourseFaculties,
 );
@@ -43,6 +47,7 @@ router.put(
 // ---------------->> Remove course Faculties route <<----------------------
 router.put(
   '/:courseId/remove-faculties',
+  authValidator('admin'),
   validateRequest(courseFacultyValidationSchema),
   CourseControllers.removeCourseFaculties,
 );

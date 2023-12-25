@@ -6,11 +6,10 @@ import { TUserRole } from '../modules/user/user.interface';
 import { User } from '../modules/user/user.model';
 import catchAsync from '../utils/catchAsync';
 
-const authValidation = (...accessRole: TUserRole[]) => {
+const authValidator = (...accessRole: TUserRole[]) => {
   return catchAsync(async (req, res, next) => {
-    const authorization = req.headers.authorization;
-    const accessToken = authorization?.split('Bearer ')[1];
-    if (!authorization || !accessToken) {
+    const accessToken = req.headers.authorization;
+    if (!accessToken) {
       throw new AppError(
         httpStatus.UNAUTHORIZED,
         'You are not authorized user',
@@ -64,4 +63,4 @@ const authValidation = (...accessRole: TUserRole[]) => {
   });
 };
 
-export default authValidation;
+export default authValidator;

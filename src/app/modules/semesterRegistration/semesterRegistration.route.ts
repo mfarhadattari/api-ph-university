@@ -1,4 +1,5 @@
 import express from 'express';
+import authValidator from '../../middlewares/authValidator';
 import validateRequest from '../../middlewares/validateRequest';
 import { SemesterRegistrationControllers } from './semesterRegistration.controller';
 import {
@@ -12,22 +13,29 @@ const router = express.Router();
 // ----------------->> Create Semester Registration Route <<----------------
 router.post(
   '/',
+  authValidator('admin'),
   validateRequest(createSemesterRegistrationValidationSchema),
   SemesterRegistrationControllers.createSemesterRegistration,
 );
 
 // ---------------->> Get all Semester Registration Route <<----------------------
-router.get('/', SemesterRegistrationControllers.getAllSemesterRegistration);
+router.get(
+  '/',
+  authValidator('admin'),
+  SemesterRegistrationControllers.getAllSemesterRegistration,
+);
 
 // ---------------->> Get Single Semester Registration Route <<----------------------
 router.get(
   '/:id',
+  authValidator('admin'),
   SemesterRegistrationControllers.getSingleSemesterRegistration,
 );
 
 // ---------------->> Update Semester Registration Route <<----------------------
 router.patch(
   '/:id',
+  authValidator('admin'),
   validateRequest(updateSemesterRegistrationValidationSchema),
   SemesterRegistrationControllers.updateSemesterRegistration,
 );
@@ -35,6 +43,7 @@ router.patch(
 // ---------------->> Delete Semester Registration Route <<----------------------
 router.delete(
   '/:id',
+  authValidator('admin'),
   SemesterRegistrationControllers.deleteSemesterRegistration,
 );
 

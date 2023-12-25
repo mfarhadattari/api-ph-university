@@ -1,4 +1,5 @@
 import express from 'express';
+import authValidator from '../../middlewares/authValidator';
 import validateRequest from '../../middlewares/validateRequest';
 import { AcademicSemesterControllers } from './academicSemester.controller';
 import {
@@ -11,19 +12,29 @@ const router = express.Router();
 // ------------>> Create Academic Semester Route <<------------
 router.post(
   '/',
+  authValidator('admin'),
   validateRequest(createAcademicSemesterValidationScheme),
   AcademicSemesterControllers.createAcademicSemester,
 );
 
 // ------------>> Get All Academic Semester Route <<------------
-router.get('/', AcademicSemesterControllers.getAllAcademicSemesters);
+router.get(
+  '/',
+  authValidator('admin'),
+  AcademicSemesterControllers.getAllAcademicSemesters,
+);
 
 // ------------>> Get Single Academic Semester Route <<------------
-router.get('/:id', AcademicSemesterControllers.getSingleAcademicSemesters);
+router.get(
+  '/:id',
+  authValidator('admin'),
+  AcademicSemesterControllers.getSingleAcademicSemesters,
+);
 
 // ------------>> Update Academic Semester Route <<------------
 router.patch(
   '/:id',
+  authValidator('admin'),
   validateRequest(updateAcademicSemesterValidationScheme),
   AcademicSemesterControllers.updateAcademicSemester,
 );

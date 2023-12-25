@@ -1,4 +1,5 @@
 import express from 'express';
+import authValidator from '../../middlewares/authValidator';
 import validateRequest from '../../middlewares/validateRequest';
 import { StudentController } from './student.controller';
 import { updateStudentValidationSchema } from './student.validation';
@@ -7,17 +8,18 @@ import { updateStudentValidationSchema } from './student.validation';
 const router = express.Router();
 
 // ---------------->> Get all students route <<----------------------
-router.get('/', StudentController.getAllStudents);
+router.get('/', authValidator('admin'), StudentController.getAllStudents);
 
 // ---------------->> Get Single students route <<----------------------
-router.get('/:id', StudentController.getSingleStudent);
+router.get('/:id', authValidator('admin'), StudentController.getSingleStudent);
 
 // ---------------->> Delete students route <<----------------------
-router.delete('/:id', StudentController.deleteStudent);
+router.delete('/:id', authValidator('admin'), StudentController.deleteStudent);
 
 // ---------------->> Update students route <<----------------------
 router.patch(
   '/:id',
+  authValidator('admin'),
   validateRequest(updateStudentValidationSchema),
   StudentController.updateStudent,
 );

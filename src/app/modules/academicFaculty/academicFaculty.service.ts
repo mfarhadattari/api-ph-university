@@ -1,17 +1,17 @@
 import { IAcademicFaculty } from './academicFaculty.interface';
-import { AcademicFaculties } from './academicFaculty.model';
+import { AcademicFaculty } from './academicFaculty.model';
 
 // ------------------->> Create Academic Faculty Service <<-------------------------
 const createAcademicFacultyIntoDB = async (
   payload: IAcademicFaculty,
 ): Promise<IAcademicFaculty> => {
-  const result = await AcademicFaculties.create(payload);
+  const result = await AcademicFaculty.create(payload);
   return result;
 };
 
 // ------------------->> GET All Academic Faculty Service <<-------------------------
 const getAllAcademicFacultyFromDB = async (): Promise<IAcademicFaculty[]> => {
-  const result = await AcademicFaculties.find();
+  const result = await AcademicFaculty.find();
   return result;
 };
 
@@ -19,7 +19,7 @@ const getAllAcademicFacultyFromDB = async (): Promise<IAcademicFaculty[]> => {
 const getSingleAcademicFacultyFromDB = async (
   id: string,
 ): Promise<IAcademicFaculty | null> => {
-  const result = await AcademicFaculties.findById(id);
+  const result = await AcademicFaculty.findById(id);
   return result;
 };
 
@@ -28,7 +28,7 @@ const updateAcademicFacultyIntoDB = async (
   id: string,
   payload: IAcademicFaculty,
 ): Promise<IAcademicFaculty | null> => {
-  const result = await AcademicFaculties.findByIdAndUpdate(id, payload);
+  const result = await AcademicFaculty.findByIdAndUpdate(id, payload);
   return result;
 };
 

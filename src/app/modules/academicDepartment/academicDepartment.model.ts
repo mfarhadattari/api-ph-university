@@ -17,7 +17,7 @@ const academicDepartmentSchema = new Schema<IAcademicDepartment>({
 
 // --------------------->> Create Academic Department Middleware <<--------------------
 academicDepartmentSchema.pre('save', async function (next) {
-  const isExist = await AcademicDepartments.findOne({ name: this.name });
+  const isExist = await AcademicDepartment.findOne({ name: this.name });
   if (isExist) {
     throw new AppError(
       httpStatus.NOT_FOUND,
@@ -30,7 +30,7 @@ academicDepartmentSchema.pre('save', async function (next) {
 // --------------------->> Update Academic Department Middleware <<--------------------
 academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
   const query = this.getQuery();
-  const isExist = await AcademicDepartments.findOne(query);
+  const isExist = await AcademicDepartment.findOne(query);
   if (!isExist) {
     throw new AppError(
       httpStatus.NOT_FOUND,
@@ -40,7 +40,7 @@ academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
   next();
 });
 
-export const AcademicDepartments = model<IAcademicDepartment>(
+export const AcademicDepartment = model<IAcademicDepartment>(
   'AcademicDepartment',
   academicDepartmentSchema,
 );

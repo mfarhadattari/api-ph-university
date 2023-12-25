@@ -42,7 +42,7 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
 
 // --------------->> Academic Semester Create Hook <<---------------------
 academicSemesterSchema.pre('save', async function (next) {
-  const isExist = await AcademicSemesters.findOne({
+  const isExist = await AcademicSemester.findOne({
     name: this.name,
     year: this.year,
   });
@@ -52,7 +52,7 @@ academicSemesterSchema.pre('save', async function (next) {
   next();
 });
 
-export const AcademicSemesters = model<IAcademicSemester>(
+export const AcademicSemester = model<IAcademicSemester>(
   'AcademicSemester',
   academicSemesterSchema,
 );

@@ -3,13 +3,13 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import { config } from '../../config';
 import AppError from '../../error/AppError';
-import { AcademicSemesters } from '../academicSemester/academicSemester.model';
+import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import { IAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
 import { IFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
 import { IStudent } from '../student/student.interface';
-import { Students } from '../student/student.model';
+import { Student } from '../student/student.model';
 import { IUser } from './user.interface';
 import { User } from './user.model';
 import {
@@ -30,7 +30,7 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
   userData.role = 'student';
 
   // get academic semester
-  const admissionSemester = await AcademicSemesters.findById(
+  const admissionSemester = await AcademicSemester.findById(
     payload.admissionSemester,
   );
 
@@ -57,7 +57,7 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
     payload.userId = newUser[0]._id;
 
     //   creating a student --> transaction 2
-    const newStudent = await Students.create([payload], { session });
+    const newStudent = await Student.create([payload], { session });
 
     if (!newStudent.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');

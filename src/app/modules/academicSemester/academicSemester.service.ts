@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import AppError from '../../error/AppError';
 import { semesterNameAndCodeMapper } from './academicSemester.constant';
 import { IAcademicSemester } from './academicSemester.interface';
-import { AcademicSemesters } from './academicSemester.model';
+import { AcademicSemester } from './academicSemester.model';
 
 // ---------------->> Create Academic Semester Service <<---------------
 const createAcademicSemesterIntoDB = async (
@@ -14,7 +14,7 @@ const createAcademicSemesterIntoDB = async (
       'Invalid Semester code',
     );
   }
-  const result = await AcademicSemesters.create(payload);
+  const result = await AcademicSemester.create(payload);
   return result;
 };
 
@@ -22,7 +22,7 @@ const createAcademicSemesterIntoDB = async (
 const getAllAcademicSemestersFromDB = async (): Promise<
   IAcademicSemester[]
 > => {
-  const result = await AcademicSemesters.find();
+  const result = await AcademicSemester.find();
   return result;
 };
 
@@ -30,7 +30,7 @@ const getAllAcademicSemestersFromDB = async (): Promise<
 const getSingleAcademicSemesterFromDB = async (
   id: string,
 ): Promise<IAcademicSemester | null> => {
-  const result = await AcademicSemesters.findById(id);
+  const result = await AcademicSemester.findById(id);
   return result;
 };
 
@@ -49,7 +49,7 @@ const updateAcademicSemesterIntoDB = async (
       'Invalid Semester code',
     );
   }
-  const result = await AcademicSemesters.findByIdAndUpdate(id, payload);
+  const result = await AcademicSemester.findByIdAndUpdate(id, payload);
   return result;
 };
 

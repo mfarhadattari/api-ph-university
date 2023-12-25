@@ -55,7 +55,7 @@ const courseSchema = new Schema<ICourse>(
   },
 );
 
-export const Courses = model<ICourse>('Course', courseSchema);
+export const Course = model<ICourse>('Course', courseSchema);
 
 const courseFacultySchema = new Schema<ICourseFaculty>(
   {

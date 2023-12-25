@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
-import { AcademicSemesters } from '../academicSemester/academicSemester.model';
+import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import { OfferedCourse } from '../offeredCourse/offeredCourse.model';
 import { RegistrationStatus } from './semesterRegistration.const';
 import { ISemesterRegistration } from './semesterRegistration.interface';
@@ -32,7 +32,7 @@ const createSemesterRegistrationIntoDB = async (
   }
 
   // checking academic semester existence
-  const isAcademicSemesterExist = await AcademicSemesters.findById(
+  const isAcademicSemesterExist = await AcademicSemester.findById(
     payload.academicSemester,
   );
 

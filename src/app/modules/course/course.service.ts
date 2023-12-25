@@ -5,17 +5,17 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
 import { courseSearchableFields } from './course.const';
 import { ICourse, ICourseFaculty } from './course.interface';
-import { CourseFaculty, Courses } from './course.model';
+import { Course, CourseFaculty } from './course.model';
 
 // ------------------>> Create Course Service <<-------------------
 const createCourseIntoDB = async (payload: ICourse) => {
-  const result = await Courses.create(payload);
+  const result = await Course.create(payload);
   return result;
 };
 
 // ------------------>> Get All Course Service <<-------------------
 const getAllCourseFromDB = async (query: Record<string, unknown>) => {
-  const modelQuery = Courses.find().populate('preRequisiteCourses.course');
+  const modelQuery = Course.find().populate('preRequisiteCourses.course');
   const courseQuery = new QueryBuilder(modelQuery, query)
     .search(courseSearchableFields)
     .filter()
@@ -28,7 +28,7 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
 
 // ------------------>> Get Single Course Service <<-------------------
 const getSingleCourseFromDB = async (id: string) => {
-  const result = await Courses.findById(id).populate(
+  const result = await Course.findById(id).populate(
     'preRequisiteCourses.course',
   );
   return result;
@@ -36,7 +36,7 @@ const getSingleCourseFromDB = async (id: string) => {
 
 // ------------------>> Delete Course Service <<-------------------
 const deleteCourseFromDB = async (id: string) => {
-  const result = await Courses.findByIdAndUpdate(
+  const result = await Course.findByIdAndUpdate(
     id,
     {
       isDeleted: true,
@@ -55,7 +55,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<ICourse>) => {
   try {
     session.startTransaction();
     // basic update
-    const basicCourseUpdate = await Courses.findByIdAndUpdate(
+    const basicCourseUpdate = await Course.findByIdAndUpdate(
       id,
       remainingCourseData,
       {
@@ -74,7 +74,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<ICourse>) => {
       ?.filter((el) => el.isDeleted === true)
       .map((el) => el.course);
 
-    const deletedPrerequisiteCourse = await Courses.findByIdAndUpdate(
+    const deletedPrerequisiteCourse = await Course.findByIdAndUpdate(
       id,
       {
         $pull: {
@@ -97,7 +97,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<ICourse>) => {
       (el) => !el.isDeleted === true,
     );
 
-    const newPreRequisiteCourse = await Courses.findByIdAndUpdate(
+    const newPreRequisiteCourse = await Course.findByIdAndUpdate(
       id,
       {
         $addToSet: {
@@ -118,7 +118,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<ICourse>) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Course update failed');
     }
 
-    const result = await Courses.findById(id).populate(
+    const result = await Course.findById(id).populate(
       'preRequisiteCourses.course',
     );
 

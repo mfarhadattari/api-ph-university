@@ -6,13 +6,13 @@ import AppError from '../../error/AppError';
 import { User } from '../user/user.model';
 import { studentSearchableField } from './student.const';
 import { IStudent } from './student.interface';
-import { Students } from './student.model';
+import { Student } from './student.model';
 
 // ----------------------->> Get All Student Service <<--------------------
 const getAllStudentsFromDB = async (
   query: Record<string, unknown>,
 ): Promise<IStudent[]> => {
-  const modelQuery = Students.find()
+  const modelQuery = Student.find()
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -33,7 +33,7 @@ const getAllStudentsFromDB = async (
 
 // ----------------------->> Get Single Student Service <<--------------------
 const getSingleStudentFromDB = async (id: string): Promise<IStudent | null> => {
-  const result = await Students.findById(id).populate({
+  const result = await Student.findById(id).populate({
     path: 'academicDepartment',
     populate: {
       path: 'academicFaculty',
@@ -49,7 +49,7 @@ const deleteStudentFormDB = async (id: string) => {
   try {
     session.startTransaction();
 
-    const deletedStudent = await Students.findByIdAndUpdate(
+    const deletedStudent = await Student.findByIdAndUpdate(
       id,
       { isDeleted: true },
       { new: true, session: session },
@@ -104,7 +104,7 @@ const updateStudentIntoDB = async (
     }
   }
 
-  const result = await Students.findByIdAndUpdate(id, modifiedStudent, {
+  const result = await Student.findByIdAndUpdate(id, modifiedStudent, {
     new: true,
     runValidators: true,
   }).populate({

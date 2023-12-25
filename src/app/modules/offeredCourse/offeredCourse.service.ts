@@ -1,9 +1,9 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
-import { AcademicDepartments } from '../academicDepartment/academicDepartment.model';
-import { AcademicFaculties } from '../academicFaculty/academicFaculty.model';
-import { Courses } from '../course/course.model';
+import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
+import { AcademicFaculty } from '../academicFaculty/academicFaculty.model';
+import { Course } from '../course/course.model';
 import { Faculty } from '../faculty/faculty.model';
 import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
 import { IOfferedCourse } from './offeredCourse.interface';
@@ -33,18 +33,18 @@ const createOfferedCourseIntoDB = async (payload: IOfferedCourse) => {
 
   // check academic department exist
   const isAcademicDepartmentExist =
-    await AcademicDepartments.findById(academicDepartment);
+    await AcademicDepartment.findById(academicDepartment);
   if (!isAcademicDepartmentExist) {
     throw new AppError(httpStatus.NOT_FOUND, 'Academic Department not found');
   }
   // check academic Faculty exist
   const isAcademicFacultyExist =
-    await AcademicFaculties.findById(academicFaculty);
+    await AcademicFaculty.findById(academicFaculty);
   if (!isAcademicFacultyExist) {
     throw new AppError(httpStatus.NOT_FOUND, 'Academic Faculty not found');
   }
   // check course exist
-  const isCourseExist = await Courses.findById(course);
+  const isCourseExist = await Course.findById(course);
   if (!isCourseExist) {
     throw new AppError(httpStatus.NOT_FOUND, 'Course not found');
   }
@@ -58,12 +58,10 @@ const createOfferedCourseIntoDB = async (payload: IOfferedCourse) => {
   payload.academicSemester = isSemesterRegistrationExist.academicSemester;
 
   // matching academic department and academic faculty
-  const isAcademicDepartmentAndFacultyMatch = await AcademicDepartments.findOne(
-    {
-      _id: academicDepartment,
-      academicFaculty,
-    },
-  );
+  const isAcademicDepartmentAndFacultyMatch = await AcademicDepartment.findOne({
+    _id: academicDepartment,
+    academicFaculty,
+  });
 
   if (!isAcademicDepartmentAndFacultyMatch) {
     throw new AppError(

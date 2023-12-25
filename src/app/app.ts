@@ -1,3 +1,4 @@
+import cookie from 'cookie-parser';
 import cors from 'cors';
 import express, {
   Application,
@@ -14,8 +15,13 @@ import sendResponse from './utils/sendResponse';
 const app: Application = express();
 
 // ------------>> Application Parsers <<----------------
-app.use(cors());
 app.use(express.json());
+app.use(cookie());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+  }),
+);
 
 // -------------->> Application Routes <<----------------
 app.use('/api/v1', router);

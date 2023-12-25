@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
-import { Users } from '../user/user.model';
+import { User } from '../user/user.model';
 import { facultySearchableField } from './faculty.const';
 import { IFaculty } from './faculty.interface';
 import { Faculty } from './faculty.model';
@@ -57,7 +57,7 @@ const deleteFacultyFormDB = async (id: string) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete Faculty');
     }
 
-    const deletedUser = await Users.findByIdAndUpdate(
+    const deletedUser = await User.findByIdAndUpdate(
       deletedFaculty.userId,
       { isDeleted: true },
       { new: true, session: session },

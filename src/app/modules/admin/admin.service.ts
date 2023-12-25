@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
-import { Users } from '../user/user.model';
+import { User } from '../user/user.model';
 import { adminSearchableField } from './admin.const';
 import { IAdmin } from './admin.interface';
 import { Admin } from './admin.model';
@@ -58,7 +58,7 @@ const deleteAdminFormDB = async (id: string) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete Admin');
     }
 
-    const deletedUser = await Users.findByIdAndUpdate(
+    const deletedUser = await User.findByIdAndUpdate(
       deletedAdmin.userId,
       { isDeleted: true },
       { new: true, session: session },

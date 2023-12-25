@@ -1,9 +1,9 @@
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
-import { Users } from './user.model';
+import { User } from './user.model';
 
 // ------------------->> Get Last Student Id <----------------
 const getLastStudentId = async () => {
-  const lastStudentId = await Users.findOne(
+  const lastStudentId = await User.findOne(
     { role: 'student' },
     { id: 1, _id: 0 },
   )
@@ -36,7 +36,7 @@ export const generateStudentId = async (payload: IAcademicSemester) => {
 
 // ------------------->> Get Last Faculty Id <----------------
 const getLastFacultyId = async () => {
-  const lastFacultyId = await Users.findOne(
+  const lastFacultyId = await User.findOne(
     { role: 'faculty' },
     { id: 1, _id: 0 },
   )
@@ -62,7 +62,7 @@ export const generateFacultyId = async () => {
 
 // ------------------->> Get Last Admin Id <----------------
 const getLastAdminId = async () => {
-  const lastAdminId = await Users.findOne({ role: 'admin' }, { id: 1, _id: 0 })
+  const lastAdminId = await User.findOne({ role: 'admin' }, { id: 1, _id: 0 })
     .sort({
       createdAt: -1,
     })

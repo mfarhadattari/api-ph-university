@@ -11,7 +11,7 @@ import { Faculty } from '../faculty/faculty.model';
 import { IStudent } from '../student/student.interface';
 import { Students } from '../student/student.model';
 import { IUser } from './user.interface';
-import { Users } from './user.model';
+import { User } from './user.model';
 import {
   generateAdminId,
   generateFacultyId,
@@ -46,7 +46,7 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
     userData.id = await generateStudentId(admissionSemester);
 
     //   creating a user --> transaction 1
-    const newUser = await Users.create([userData], { session });
+    const newUser = await User.create([userData], { session });
 
     //   creating student
     if (!newUser.length) {
@@ -93,7 +93,7 @@ const createFacultyIntoDB = async (password: string, payload: IFaculty) => {
     userData.id = await generateFacultyId();
 
     //   creating a user
-    const newUser = await Users.create([userData], { session });
+    const newUser = await User.create([userData], { session });
 
     //   creating student
     if (!newUser.length) {
@@ -140,7 +140,7 @@ const createAdminIntoDB = async (password: string, payload: IAdmin) => {
     userData.id = await generateAdminId();
 
     //   creating a user
-    const newUser = await Users.create([userData], { session });
+    const newUser = await User.create([userData], { session });
 
     //   creating student
     if (!newUser.length) {

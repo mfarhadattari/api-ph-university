@@ -5,6 +5,7 @@ import { createAdminValidationSchema } from '../admin/admin.validation';
 import { createFacultyValidationSchema } from '../faculty/faculty.validation';
 import { createStudentValidationSchema } from '../student/student.validation';
 import { UserControllers } from './user.controller';
+import { updateUserStatusValidationSchema } from './user.validation';
 
 // -------->> Initialized Router <<------------ //
 const router = express.Router();
@@ -38,6 +39,14 @@ router.get(
   '/get-me',
   authValidator('admin', 'faculty', 'student'),
   UserControllers.getMe,
+);
+
+// ------------->> Update User Status Route <<--------------- //
+router.patch(
+  '/:id/update-status',
+  authValidator('admin'),
+  validateRequest(updateUserStatusValidationSchema),
+  UserControllers.updateUserStatus,
 );
 
 // ---------->> Export User Routes <------------- //

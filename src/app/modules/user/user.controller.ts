@@ -56,10 +56,24 @@ const getMe = catchAsync(async (req, res) => {
   });
 });
 
+// -------------------->> Update User Status Controller <<-------------------
+const updateUserStatus = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await UserServices.updateUserStatusIntoDB(id, req.body);
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: 'User status updated successfully',
+    data: result,
+  });
+});
+
 // -------------------->> Export Student Controllers <<-------------------
 export const UserControllers = {
   createStudent,
   createFaculty,
   createAdmin,
   getMe,
+  updateUserStatus,
 };

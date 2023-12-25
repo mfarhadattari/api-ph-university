@@ -205,10 +205,22 @@ const getMeFromDB = async (payload: JwtPayload) => {
   return result;
 };
 
+// -------------------->> Update User Status Service <<-------------------
+const updateUserStatusIntoDB = async (
+  id: string,
+  payload: { status: string },
+) => {
+  const result = await User.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+  return result;
+};
+
 // -------------------->> Export User Services <<-------------------
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
   getMeFromDB,
+  updateUserStatusIntoDB,
 };

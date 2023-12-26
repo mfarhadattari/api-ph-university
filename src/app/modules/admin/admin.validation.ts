@@ -40,10 +40,6 @@ export const createAdminValidationSchema = z.object({
         invalid_type_error: 'Admin Permanent Address must be a string',
         required_error: 'Admin Permanent Address is required',
       }),
-      profileImage: z.string({
-        invalid_type_error: 'Admin Profile Image must be a string',
-        required_error: 'Admin Profile Image is required',
-      }),
       managementDepartment: z.string({
         invalid_type_error: 'Admin Management Department must be a string',
         required_error: 'Admin Management Department is required',

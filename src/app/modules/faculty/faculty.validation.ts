@@ -43,10 +43,6 @@ export const createFacultyValidationSchema = z.object({
         invalid_type_error: 'Faculty Permanent Address must be a string',
         required_error: 'Faculty Permanent Address is required',
       }),
-      profileImage: z.string({
-        invalid_type_error: 'Faculty Profile Image must be a string',
-        required_error: 'Faculty Profile Image is required',
-      }),
       academicDepartment: z.string({
         invalid_type_error: 'Faculty Academic Department must be a string',
         required_error: 'Faculty Academic Department is required',

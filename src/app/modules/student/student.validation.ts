@@ -107,10 +107,6 @@ export const createStudentValidationSchema = z.object({
       }),
       parents: createParentsValidationSchema,
       guardian: createGuardianValidationSchema,
-      profileImage: z.string({
-        invalid_type_error: 'Student Profile Image must be a string',
-        required_error: 'Student Profile Image is required',
-      }),
       academicDepartment: z.string({
         invalid_type_error: 'Student Academic Department must be a string',
         required_error: 'Student Academic Department is required',

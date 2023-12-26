@@ -7,7 +7,12 @@ import { UserServices } from './user.service';
 // -------------------->> Create A Student Controller <<-------------------
 const createStudent = catchAsync(async (req, res) => {
   const { password, student } = req.body;
-  const result = await UserServices.createStudentIntoDB(password, student);
+  const file = req.file;
+  const result = await UserServices.createStudentIntoDB(
+    file,
+    password,
+    student,
+  );
 
   sendResponse(res, {
     status: httpStatus.OK,
@@ -20,7 +25,12 @@ const createStudent = catchAsync(async (req, res) => {
 // -------------------->> Create A Faculty Controller <<-------------------
 const createFaculty = catchAsync(async (req, res) => {
   const { password, faculty } = req.body;
-  const result = await UserServices.createFacultyIntoDB(password, faculty);
+  const file = req.file;
+  const result = await UserServices.createFacultyIntoDB(
+    file,
+    password,
+    faculty,
+  );
 
   sendResponse(res, {
     status: httpStatus.OK,
@@ -33,7 +43,8 @@ const createFaculty = catchAsync(async (req, res) => {
 // -------------------->> Create A Admin Controller <<-------------------
 const createAdmin = catchAsync(async (req, res) => {
   const { password, admin } = req.body;
-  const result = await UserServices.createAdminIntoDB(password, admin);
+  const file = req.file;
+  const result = await UserServices.createAdminIntoDB(file, password, admin);
 
   sendResponse(res, {
     status: httpStatus.OK,

@@ -1,12 +1,13 @@
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
 import multer from 'multer';
-import path from 'path';
+import streamifier from 'streamifier';
 import { config } from '../config';
 
 // --------------->> Upload file by multer <<-------------------
-const storage = multer.diskStorage({
+/* const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(process.cwd(), '/upload/'));
   },
@@ -15,11 +16,11 @@ const storage = multer.diskStorage({
   },
 });
 
-export const upload = multer({ storage: storage });
+export const upload = multer({ storage: storage }); */
 
 // --------------->> Upload In Cloudinary <<-------------------
 
-cloudinary.config(config.cloudinary_config);
+/* cloudinary.config(config.cloudinary_config);
 
 export const uploadImageIntoCloudinary = (imageName: string, path: string) => {
   return new Promise((resolve, reject) => {
@@ -40,5 +41,27 @@ export const uploadImageIntoCloudinary = (imageName: string, path: string) => {
         });
       },
     );
+  });
+}; */
+
+// --------------->> Upload file by multer <<-------------------
+
+export const upload = multer();
+
+// --------------->> Upload In Cloudinary <<-------------------
+
+cloudinary.config(config.cloudinary_config);
+
+export const uploadImageIntoCloudinary = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream((error, result) => {
+      if (result) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+
+    streamifier.createReadStream(file.buffer).pipe(stream);
   });
 };

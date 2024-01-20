@@ -65,12 +65,13 @@ const createStudentIntoDB = async (
     payload.userId = newUser[0]._id;
 
     // upload profile image into cloudinary
-    const fileName = `${userData.id}-${payload.name.firstName}`;
-    const filePath = file.path;
-    const uploadImage: any = await uploadImageIntoCloudinary(
+    // const fileName = `${userData.id}-${payload.name.firstName}`;
+    // const filePath = file.path;
+    /* const uploadImage: any = await uploadImageIntoCloudinary(
       fileName,
       filePath,
-    );
+    ); */
+    const uploadImage: any = await uploadImageIntoCloudinary(file);
     payload.profileImage = uploadImage.secure_url;
 
     //   creating a student --> transaction 2
@@ -128,12 +129,13 @@ const createFacultyIntoDB = async (
     payload.userId = newUser[0]._id;
 
     // upload profile image into cloudinary
-    const fileName = `${userData.id}-${payload.name.firstName}`;
+    /* const fileName = `${userData.id}-${payload.name.firstName}`;
     const filePath = file.path;
     const uploadImage: any = await uploadImageIntoCloudinary(
       fileName,
       filePath,
-    );
+    ); */
+    const uploadImage: any = await uploadImageIntoCloudinary(file);
     payload.profileImage = uploadImage.secure_url;
 
     //   creating a faculty
@@ -191,12 +193,13 @@ const createAdminIntoDB = async (
     payload.userId = newUser[0]._id;
 
     // upload profile image into cloudinary
-    const fileName = `${userData.id}-${payload.name.firstName}`;
+    /* const fileName = `${userData.id}-${payload.name.firstName}`;
     const filePath = file.path;
     const uploadImage: any = await uploadImageIntoCloudinary(
       fileName,
       filePath,
-    );
+    ); */
+    const uploadImage: any = await uploadImageIntoCloudinary(file);
     payload.profileImage = uploadImage.secure_url;
 
     //   creating a admin

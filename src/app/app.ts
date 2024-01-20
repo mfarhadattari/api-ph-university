@@ -21,6 +21,7 @@ app.use(cookie());
 app.use(
   cors({
     origin: [config.client_base_url as string],
+    credentials: true,
   }),
 );
 

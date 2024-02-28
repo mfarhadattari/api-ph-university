@@ -25,7 +25,7 @@ router.post(
 // ------------->> Create A Faculty Route <<--------------- //
 router.post(
   '/create-faculty',
-  authValidator('admin'),
+  authValidator('superAdmin', 'admin'),
   upload.single('file'),
   parseBodyFormData,
   validateRequest(createFacultyValidationSchema),
@@ -35,7 +35,7 @@ router.post(
 // ------------->> Create A Admin Route <<--------------- //
 router.post(
   '/create-admin',
-  authValidator('admin'),
+  authValidator('superAdmin'),
   upload.single('file'),
   parseBodyFormData,
   validateRequest(createAdminValidationSchema),
@@ -45,14 +45,14 @@ router.post(
 // ------------->> Get me Route <<--------------- //
 router.get(
   '/get-me',
-  authValidator('admin', 'faculty', 'student'),
+  authValidator('superAdmin', 'admin', 'faculty', 'student'),
   UserControllers.getMe,
 );
 
 // ------------->> Update User Status Route <<--------------- //
 router.patch(
   '/:id/update-status',
-  authValidator('admin'),
+  authValidator('admin', 'superAdmin'),
   validateRequest(updateUserStatusValidationSchema),
   UserControllers.updateUserStatus,
 );

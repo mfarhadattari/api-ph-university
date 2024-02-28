@@ -13,7 +13,7 @@ const router = express.Router();
 // -------->> Create Academic Department Router <<------------ //
 router.post(
   '/',
-  authValidator('admin'),
+  authValidator('superAdmin', 'admin'),
   validateRequest(createAcademicDepartmentValidationSchema),
   AcademicDepartmentControllers.createAcademicDepartment,
 );
@@ -21,21 +21,21 @@ router.post(
 // -------->> Get All Academic Department Router <<------------ //
 router.get(
   '/',
-  authValidator('admin'),
+  authValidator('superAdmin', 'admin'),
   AcademicDepartmentControllers.getAllAcademicDepartment,
 );
 
 // -------->> Get Single Academic Department Router <<------------ //
 router.get(
   '/:id',
-  authValidator('admin'),
+  authValidator('superAdmin', 'admin'),
   AcademicDepartmentControllers.getSingleAcademicDepartment,
 );
 
 // -------->> Update Academic Department Router <<------------ //
 router.patch(
   '/:id',
-  authValidator('admin'),
+  authValidator('superAdmin', 'admin'),
   validateRequest(updateAcademicDepartmentValidationSchema),
   AcademicDepartmentControllers.updateAcademicDepartment,
 );

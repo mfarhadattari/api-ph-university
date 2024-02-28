@@ -17,11 +17,19 @@ const authValidator = (...accessRole: TUserRole[]) => {
     }
 
     // check token verified
-    const decoded = jwt.verify(
-      accessToken,
-      config.jwt_access_secret as string,
-      config.jwt_access_config as Record<string, unknown>,
-    ) as JwtPayload;
+    let decoded: JwtPayload;
+    try {
+      decoded = jwt.verify(
+        accessToken,
+        config.jwt_access_secret as string,
+        config.jwt_access_config as Record<string, unknown>,
+      ) as JwtPayload;
+    } catch (error) {
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'You are not authorized user',
+      );
+    }
 
     const { id, role, iat } = decoded;
 

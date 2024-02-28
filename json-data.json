@@ -1,0 +1,70 @@
+{
+  "academicFaculties": [
+    {
+      "name": "Faculty of Programming",
+      "departments": ["Web development L1", "Web development L2", "Pritron"]
+    },
+    {
+      "name": "Faculty of Engineering",
+      "departments": [
+        "Civil Engineering",
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "Chemical Engineering",
+        "Computer Engineering"
+      ]
+    },
+    {
+      "name": "Faculty of Medical Sciences",
+      "departments": [
+        "Medicine",
+        "Dentistry",
+        "Pharmacy",
+        "Nursing",
+        "Biomedical Sciences"
+      ]
+    },
+    {
+      "name": "Faculty of Arts and Humanities",
+      "departments": [
+        "Literature",
+        "History",
+        "Philosophy",
+        "Languages",
+        "Fine Arts"
+      ]
+    },
+    {
+      "name": "Faculty of Business Administration",
+      "departments": [
+        "Accounting",
+        "Finance",
+        "Marketing",
+        "Management",
+        "Entrepreneurship"
+      ]
+    }
+  ],
+  "faculty": [
+    {
+      "name": "Dr. Emily Smith",
+      "department": "Computer Science"
+    },
+    {
+      "name": "Prof. David Johnson",
+      "department": "Electrical Engineering"
+    },
+    {
+      "name": "Dr. Sarah Lee",
+      "department": "Physics"
+    },
+    {
+      "name": "Prof. Michael Brown",
+      "department": "Mathematics"
+    },
+    {
+      "name": "Dr. Jennifer Wilson",
+      "department": "Biology"
+    }
+  ]
+}

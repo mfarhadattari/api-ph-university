@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { Server } from 'http';
 import mongoose from 'mongoose';
+import { seedAdmin } from './DB';
 import app from './app';
 import { config } from './config';
 
@@ -15,7 +16,15 @@ const bootstrap = async () => {
     });
 
     //   connecting database
-    await mongoose.connect(config.db_uri as string);
+    await mongoose
+      .connect(config.db_uri as string)
+      .then(async () => {
+        await seedAdmin();
+        console.log(`[Server] Database connected`);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   } catch (error) {
     console.dir(error);
   }
